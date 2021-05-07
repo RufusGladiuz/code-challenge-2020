@@ -8,7 +8,7 @@ class LemmaTokenizer(object):
 
     def __init__(self, lemmatizer =  WordNetLemmatizer(),
                 stop_words = stopwords.words('english')):
-        self.wnl = WordNetLemmatizer()
+        self.lemma = WordNetLemmatizer()
         self.stpwords = stop_words
 
     def __call__(self, article):
@@ -17,4 +17,4 @@ class LemmaTokenizer(object):
         article = re.findall("[A-Za-z]+", article)
         
         article = [token for token in article if token not in self.stpwords]
-        return [self.wnl.lemmatize(token) for token in article]
+        return [self.lemma.lemmatize(token) for token in article]
