@@ -7,5 +7,6 @@ then
 fi
 
 VERSION=$1
-docker build -t code-challenge/download-data:$VERSION download_data
-docker build -t code-challenge/make-dataset:$VERSION make_dataset
+docker build --no-cache -t  code-challenge/download-data:$VERSION download_data
+docker build --no-cache -t  code-challenge/make-dataset:$VERSION make_dataset
+docker build --no-cache -t  code-challenge/code-challenge/download-data:$VERSION train_model

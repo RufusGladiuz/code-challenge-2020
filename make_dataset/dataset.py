@@ -4,6 +4,7 @@ import numpy as np
 from distributed import Client
 from pathlib import Path
 
+from prepare_dataset import process_data 
 
 def _save_datasets(train, test, outdir: Path):
     """Save data sets into nice directory structure and write SUCCESS flag."""
@@ -20,35 +21,28 @@ def _save_datasets(train, test, outdir: Path):
 @click.command()
 @click.option('--in-csv')
 @click.option('--out-dir')
-def make_datasets(in_csv, out_dir):
+def make_datasets(in_csv, out_dir) -> None:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # Connect to the dask cluster
-    c = Client('dask-scheduler:8786')
+    to_one_hot_encode = ["taster_name", "country", "variety", "province"]
+    drop_duplicates = ['description','title']
+    drop = ["Unnamed: 0", "designation", "region_1", "region_2", "taster_twitter_handle", "title", "winery"]
+    
+    X_train, X_test, y_train, y_test = process_data(load_dir = in_csv, 
+                                                   label_column = "points", 
+                                                   text_column = "description",
+                                                   test_size = 0.2,
+                                                   to_one_hot_encode = to_one_hot_encode,
+                                                   drop_duplicates = drop_duplicates,
+                                                   drop = drop,
+                                                   tf_idf_cutoff = 0,
+                                                   fill_mean = ["price"],
+                                                   normalize = True)
+    X_train["points"] = y_train.to_numpy()
+    X_test["points"] = y_test.to_numpy()
 
-    # load data as a dask Dataframe if you have trouble with dask
-    # please fall back to pandas or numpy
-    ddf = dd.read_csv(in_csv, blocksize=1e6)
-
-    # we set the index so we can properly execute loc below
-    ddf = ddf.set_index('Unnamed: 0')
-
-    # trigger computation
-    n_samples = len(ddf)
-
-    # TODO: implement proper dataset creation here
-    # http://docs.dask.org/en/latest/dataframe-api.html
-
-    # split dataset into train test feel free to adjust test percentage
-    idx = np.arange(n_samples)
-    test_idx = idx[:n_samples // 10]
-    test = ddf.loc[test_idx]
-
-    train_idx = idx[n_samples // 10:]
-    train = ddf.loc[train_idx]
-
-    _save_datasets(train, test, out_dir)
+    _save_datasets(X_train, X_test, out_dir)
 
 
 if __name__ == '__main__':

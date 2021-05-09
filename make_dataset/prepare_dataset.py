@@ -65,7 +65,7 @@ def oridnal_encoding(
         else:
             filler_values.append(-100)
 
-    trans_train = replace_nan_values_ordinal_encoding(
+    trans_train = _replace_nan_values_ordinal_encoding(
         trans_train, filler_values)
     trans_test = _replace_nan_values_ordinal_encoding(trans_test, filler_values)
     X_train[to_encode] = trans_train
@@ -140,13 +140,14 @@ def normalize_features(
 def process_data(load_dir: str,
                  label_column: str,
                  drop_duplicates: list,
+                 test_size = 0.2,
                  drop: list = [],
                  quantile_nan_fill: list = [],
                  to_one_hot_encode: list = [],
                  to_ordinal_encode: list = [],
                  fill_mean: list = [],
                  normalize = False,
-                 fill_nan: float = [],
+                 fill_nan: float = -1,
                  text_column: str = "",
                  nlp_tool: str = None,
                  tf_idf_cutoff: float = 0,
@@ -160,14 +161,17 @@ def process_data(load_dir: str,
             load_dir: str -> Directory to the raw data container as a csv.
             label_column: str -> Name of the columne that hold the prediction values of the dataset.
             drop_duplicates: list -> List of column names to consider for dropping duplicates
-            drop: list -> List of column names that should be excluded from the final dataframe
-            quantile_nan_fill: list  -> List with objects of class QuantileCutOrder to determine of which columns the nan values should be filled by a quantile of a categorical value
-            to_one_hot_encode: list -> List of column names that should get an one-hot-encoded
-            to_ordinal_encode: list -> List of column names that should get an ordinal encoding
-            fill_mean: list -> List of column names of which the nan values should get filled with the mean of that column
+            test_size: float = 0.2 -> Size of the test dataset after the test train split.
+            drop: list = [] -> List of column names that should be excluded from the final dataframe.
+            quantile_nan_fill: list = [] -> List with objects of class QuantileCutOrder to determine of which columns the nan values should be filled by a quantile of a categorical value.
+            to_one_hot_encode: list = [] -> List of column names that should get an one-hot-encoded.
+            to_ordinal_encode: list = [] -> List of column names that should get an ordinal encoding.
+            fill_mean: list = [] -> List of column names of which the nan values should get filled with the mean of that column.
+            normalize: bool = Flase -> To normalize the dataset or not.
+            fill_nan: float =  -1 -> Value to full Nan values with.
             text_column: str -> Name of the column that hold text and should get converted to a ML suitable format.
             nlp_tool: str -> Input need to be either 'tf-idf' (Text frequency, inverse document frequency) or 'bow' (Bag of Words). Will process the column chosen in text_column.
-            tf_idf_cutoff: float -> tf-idf values below the input values well get neglected
+            tf_idf_cutoff: float -> tf-idf values below the input values well get neglected.
             tokenizer -> Optinoal Tokenizer object for tokenizing texts.
             stop_words: list -> List of stopwords to removed from the text. Standard is nltk english stopwords.
             token_pattern: str -> A regular expression to identify word tokens. Will be ignored if tokenizer is not None.
@@ -207,7 +211,7 @@ def process_data(load_dir: str,
 
     # Split dataset into test and train data
     X_train, X_test, y_train, y_test = train_test_split(data.drop(
-        columns=[label_column]), data[label_column], test_size=0.20, random_state=0)
+        columns=[label_column]), data[label_column], test_size=test_size, random_state=0)
     
     if len(to_ordinal_encode) > 0:
         X_train, X_test = oridnal_encoding(X_train, X_test, to_ordinal_encode)

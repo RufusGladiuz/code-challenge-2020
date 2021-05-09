@@ -4,6 +4,7 @@ import click
 import logging
 import urllib.request
 
+import os
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,7 +37,11 @@ def download_data(name, url, out_dir):
 
     log.info('Downloading dataset')
     log.info(f'Will write to {out_path}')
+    log.info(f"Path exists: {os.path.exists(out_dir)}")
 
+    if os.path.exists(out_dir) == False:
+        os.makedirs(out_dir)
+    
     urllib.request.urlretrieve(url, out_path)
 
 
