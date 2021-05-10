@@ -117,14 +117,11 @@ class TrainModel(DockerTask):
         print(type(self.input().path))
         directory = os.path.dirname(self.input().path)
         train_set_path = directory + '/train.parquet'
-        test_set_path = directory + '/test.parquet'
         print(train_set_path)
-        print(test_set_path)
         return [
             'python', 'train_model.py',
-            '--X', self.input().path,
-            '--y', self.input().path,
-            '--save_path', self.out_dir 
+            '--X-train', train_set_path,
+            '--save-dir', self.out_dir 
         ]
         pass
 
