@@ -24,7 +24,7 @@ class Debug(DockerTask):
 
 class DownloadData(DockerTask):
     """Initial pipeline task downloads dataset."""
-
+    concluded_run = False
     fname = luigi.Parameter(default='wine_dataset')
     out_dir = luigi.Parameter(default='/usr/share/data/raw/')
     url = luigi.Parameter(
@@ -45,25 +45,25 @@ class DownloadData(DockerTask):
             '--out-dir', self.out_dir
         ]
 
+    def run(self):
+        super(DownloadData, self).run()
+        self.concluded_run = True
+
     def output(self):
         out_dir = Path(self.out_dir)
         out_dir.mkdir(parents=True, exist_ok=True)
-        # print(f"Print output: {str(out_dir/f'{self.fname}.csv')}")
+
         return luigi.LocalTarget(
             path=str(out_dir/f'{self.fname}.csv')
         )
 
-
     def complete(self):
-        """Hack so we don't have to create input files manually.
-        Luigi will always think that this task is done, without checking for
-        presence of source files.
-        """
-        return True
+        return self.concluded_run
 
 class MakeDatasets(DockerTask):
 
     out_dir = luigi.Parameter(default='/usr/share/data/refined/')
+    concluded_run = False
 
     @property
     def image(self):
@@ -80,16 +80,28 @@ class MakeDatasets(DockerTask):
             '--out-dir', self.out_dir
         ]
         pass
+    
+    def run(self):
+        super(MakeDatasets, self).run()
+        self.concluded_run = True
 
     def output(self):
-        return luigi.LocalTarget(
+        target =  luigi.LocalTarget(
             path=str(Path(self.out_dir) / '.SUCCESS')
         )
+        print(target.exists())
+        print(self.concluded_run)
+        print(str(Path(self.out_dir) / '.SUCCESS'))
+        return target
+
+    def complete(self):
+        return self.concluded_run
 
 
 class TrainModel(DockerTask):
 
     out_dir = luigi.Parameter(default='/usr/share/data/model/')
+    concluded_run = False
 
     @property
     def image(self):
@@ -100,14 +112,30 @@ class TrainModel(DockerTask):
 
     @property
     def command(self):
+
+        print(self.input().path)
+        print(type(self.input().path))
+        directory = os.path.dirname(self.input().path)
+        train_set_path = directory + '/train.parquet'
+        test_set_path = directory + '/test.parquet'
+        print(train_set_path)
+        print(test_set_path)
         return [
             'python', 'train_model.py',
-            '--in-csv', self.input().path,
-            '--out-dir', self.out_dir
+            '--X', self.input().path,
+            '--y', self.input().path,
+            '--save_path', self.out_dir 
         ]
         pass
 
+    def run(self):
+        super(TrainModel, self).run()
+        self.concluded_run = True
+
     def output(self):
         return luigi.LocalTarget(
-            path=str(Path(self.out_dir) / '.SUCCESS')
+            path=str(Path(self.out_dir) / 'model.sklearn')
         )
+
+    def complete(self):
+        return self.concluded_run

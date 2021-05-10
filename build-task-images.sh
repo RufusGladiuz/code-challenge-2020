@@ -9,4 +9,4 @@ fi
 VERSION=$1
 docker build --no-cache -t  code-challenge/download-data:$VERSION download_data
 docker build --no-cache -t  code-challenge/make-dataset:$VERSION make_dataset
-docker build --no-cache -t  code-challenge/code-challenge/download-data:$VERSION train_model
+docker build --no-cache -t  code-challenge/train-model:$VERSION train_model
