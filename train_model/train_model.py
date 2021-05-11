@@ -19,6 +19,7 @@ def train_model(x_train, save_dir):
     save_path.mkdir(parents=True, exist_ok=True)
 
     log = logging.getLogger('train-model')
+
     x_train = pd.read_parquet(x_train)
     y_train = x_train["points"]
     x_train = x_train.drop(columns = ["points"])
@@ -27,8 +28,9 @@ def train_model(x_train, save_dir):
     model.fit(x_train, y_train)
 
     time_delta = (datetime.now()-now).seconds/60
+    
     log.info(f"Training time: {time_delta} min")
-    log.info(f"Savinng model at {save_path}")
+    log.info(f"Saving model at {save_path}")
 
     with open(save_path / 'model.sklearn', 'wb+') as output:
         pickle.dump(model, output, protocol=None)

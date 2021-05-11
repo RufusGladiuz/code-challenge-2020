@@ -51,7 +51,7 @@ class DownloadData(DockerTask):
 
     def output(self):
         out_dir = Path(self.out_dir)
-        out_dir.mkdir(parents=True, exist_ok=True)
+        #out_dir.mkdir(parents=True, exist_ok=True)
 
         return luigi.LocalTarget(
             path=str(out_dir/f'{self.fname}.csv')
@@ -89,9 +89,6 @@ class MakeDatasets(DockerTask):
         target =  luigi.LocalTarget(
             path=str(Path(self.out_dir) / '.SUCCESS')
         )
-        print(target.exists())
-        print(self.concluded_run)
-        print(str(Path(self.out_dir) / '.SUCCESS'))
         return target
 
     def complete(self):
@@ -112,12 +109,8 @@ class TrainModel(DockerTask):
 
     @property
     def command(self):
-
-        print(self.input().path)
-        print(type(self.input().path))
         directory = os.path.dirname(self.input().path)
         train_set_path = directory + '/train.parquet'
-        print(train_set_path)
         return [
             'python', 'train_model.py',
             '--X-train', train_set_path,
@@ -127,6 +120,48 @@ class TrainModel(DockerTask):
 
     def run(self):
         super(TrainModel, self).run()
+        self.concluded_run = True
+
+    def output(self):
+        
+        directory = os.path.dirname(self.input().path)
+        test_set_path = directory + '/test.parquet'
+        train_set_path = directory + '/train.parquet'
+        
+        return {"model": luigi.LocalTarget(path=str(Path(self.out_dir) / 'model.sklearn')),
+               "train_data": luigi.LocalTarget(path=str(Path(test_set_path))),
+               "test_data": luigi.LocalTarget(path=str(Path(test_set_path)))
+               }
+
+    def complete(self):
+        return self.concluded_run
+
+class EvaluateModel(DockerTask):
+
+    out_dir = luigi.Parameter(default='/usr/share/data/report/')
+    concluded_run = False
+
+    @property
+    def image(self):
+        return f'code-challenge/evaluate-model:{VERSION}'
+
+    def requires(self):
+        return TrainModel()
+
+    @property
+    def command(self):
+        return [
+            'python', 'evaluate_model.py',
+            '--model-dir', self.input()["model"].path,
+            '--train-set-dir', self.input()["train_data"].path,
+            '--test-set-dir', self.input()["test_data"].path,
+            '--raw-data-dir', r'/usr/share/data/raw/wine_dataset.csv',
+            '--save-dir', self.out_dir 
+        ]
+        pass
+
+    def run(self):
+        super(EvaluateModel, self).run()
         self.concluded_run = True
 
     def output(self):
