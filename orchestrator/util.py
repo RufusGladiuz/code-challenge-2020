@@ -18,7 +18,7 @@ CONTAINER_TASK_VOLUMES = {
 }
 CONTAINER_TASK_NET = os.getenv('ORCHESTRATOR_NETWORK', 'code_challenge_default')
 
-
+print(f"The all might directory: {data_root}")
 class ContainerNotFound(Exception):
     pass
 

@@ -22,3 +22,5 @@ data_root/**/*.json
 data_root/**/*.parquet
 
 *.csv
+
+data_root/*

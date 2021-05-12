@@ -4,9 +4,8 @@ ENV LANG=C.UTF-8
 ENV JSON_FILE=./files.json
 ENV PYTHONPATH=/opt/orchestrator:$PYTHONPATH
 
-COPY . /opt/train_model/
+COPY . /opt/evaluate_model/
 
-RUN pip install --upgrade pip
-RUN python -m pip install -r /opt/train_model/requirements.txt
+RUN python -m pip install -r /opt/evaluate_model/requirements.txt
 
-WORKDIR /opt/train_model/
+WORKDIR /opt/evaluate_model/

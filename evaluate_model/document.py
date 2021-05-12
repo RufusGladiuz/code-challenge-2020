@@ -146,9 +146,9 @@ results = model.predict(x_test)
 # result_metrics.append(mean_squared_error(y_test, results, squared = True))
 # result_metrics.append(r2_score(y_test, results))
 
-#' Resulting Metrics
-# print(pd.DataFrame(result_metrics, columns = metrics))
+#' ### Resulting Metrics
 #+ echo=False
+# print(pd.DataFrame(result_metrics, columns = metrics))
 print(f'Mean Absolute Error: {mean_absolute_error(y_test, results)}')
 print(f'Mean Squared Error: {mean_squared_error(y_test, results, squared = True)}')
 print(f'R2: {r2_score(y_test, results)}')
