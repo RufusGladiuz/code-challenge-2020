@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from dataclasses import field
 
 @dataclass
 class ProcessSettings:
@@ -24,18 +25,18 @@ class ProcessSettings:
             save_dir: str -> A directory to save the dataset to.
     """
     label_column: str
-    drop_duplicates: list = []
-    test_size = 0.2,
-    drop: list = [],
-    to_one_hot_encode: list = [],
-    to_ordinal_encode: list = [],
-    fill_mean: list = [],
-    normalize = False,
-    fill_nan: float = -1,
-    text_column: str = "",
-    nlp_tool: str = None,
-    tf_idf_cutoff: float = 0,
-    tokenizer = None,
-    stop_words: list = None,
-    token_pattern: str = "[A-Za-z]+",
+    drop_duplicates: list = field(default_factory=list)
+    test_size = 0.2
+    drop: list = field(default_factory=list)
+    to_one_hot_encode: list = field(default_factory=list)
+    to_ordinal_encode: list = field(default_factory=list)
+    fill_mean: list = field(default_factory=list)
+    normalize = False
+    fill_nan: float = -1
+    text_column: str = ""
+    nlp_tool: str = None
+    tf_idf_cutoff: float = 0
+    tokenizer = None
+    stop_words: list = None
+    token_pattern: str = "[A-Za-z]+"
     save_dir: str = None

@@ -1,7 +1,6 @@
 {
     "label_column": "points",
-    "drop_duplicates": ["description",
-                       "title"],
+    "drop_duplicates": ["description", "title"],
     "test_size": 0.2,
     "drop": ["Unnamed: 0", 
              "designation", 
@@ -18,7 +17,7 @@
     "fill_mean": ["price"],
     "normalize": true,
     "fill_nan": [],
-    "text_column": "",
+    "text_column": "description",
     "nlp_tool": null,
     "tf_idf_cutoff": 0,
     "tokenizer": null,

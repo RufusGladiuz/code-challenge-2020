@@ -8,7 +8,6 @@ import os
 
 logging.basicConfig(level=logging.INFO)
 
-
 @click.command()
 @click.option('--name')
 @click.option('--url')
@@ -41,11 +40,8 @@ def download_data(name, url, out_dir):
 
     if os.path.exists(out_dir) == False:
         os.makedirs(out_dir)
-
-    if os.path.exists(out_dir) == False:
-        os.mkdir(Path(out_dir) / 'TEST_TEST_TEST')
     
-    log.info(f"Also created exists: {Path(out_dir) / 'TEST_TEST_TEST'}")
+    log.info(f"Lable Column: {os.getenv('LABLE_COL')}")
     urllib.request.urlretrieve(url, out_path)
 
 

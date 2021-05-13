@@ -4,7 +4,7 @@ import logging
 import pickle
 from datetime import datetime
 import pandas as pd
-
+import os
 from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
@@ -31,8 +31,8 @@ def train_model(x_train, save_dir):
     log = logging.getLogger('train-model')
 
     x_train = pd.read_parquet(x_train)
-    y_train = x_train["points"]
-    x_train = x_train.drop(columns = ["points"])
+    y_train = x_train[os.getenv('LABLE_COL')]
+    x_train = x_train.drop(columns = [os.getenv('LABLE_COL')])
     now = datetime.now()
     model = SVR(C=0.8, gamma="scale", epsilon = 0.1, kernel = "rbf")
     model.fit(x_train, y_train)

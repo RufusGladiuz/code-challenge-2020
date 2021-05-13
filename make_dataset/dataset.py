@@ -49,18 +49,21 @@ def make_datasets(in_csv:str, out_dir:str) -> None:
     
     # Load processing settings
     settings = None
-    if os.path.exists("setting.json") == True:
-        settings = json.loads("setting.json", object_hook=lambda d: SimpleNamespace(**d))
-    else:
-        settings = ProcessSettings(label_column = "labels")
-    
-    # Process dataset
-    X_train, X_test, y_train, y_test = process_data(load_dir = in_csv,
-                                                    setting = settings)
 
-      
-    X_train[settings.label.column] = y_train.to_numpy()
-    X_test[settings.label.column] = y_test.to_numpy()
+
+    with open('settings.json') as file:
+        settings = json.load(file, object_hook=lambda d: SimpleNamespace(**d))
+
+    # Process dataset
+    log.info(f"load datasets at {in_csv}")
+    print(f"load datasets at {in_csv}")
+    print(f"Drop Duplicates {settings.drop_duplicates}")
+    print(settings)
+    X_train, X_test, y_train, y_test = process_data(load_dir = in_csv,
+                                                    settings = settings)
+
+    X_train[settings.label_column] = y_train.to_numpy()
+    X_test[settings.label_column] = y_test.to_numpy()
     
     log.info(f"Saving datasets at {out_dir}")
     _save_datasets(X_train, X_test, out_dir)

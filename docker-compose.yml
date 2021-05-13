@@ -32,6 +32,7 @@ services:
       - dask-scheduler
     environment:
       - PROJECT_ROOT=$PWD
+      - LABLE_COL=$LABLE_COL
       - PIPELINE_VERSION=0.1
       - ORCHESTRATOR_NETWORK=code-challenge-2020_default
     volumes:

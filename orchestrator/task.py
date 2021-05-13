@@ -75,7 +75,7 @@ class MakeDatasets(DockerTask):
 
     def output(self):
         return{"data_sets": luigi.LocalTarget(path=str(Path(self.out_dir) / '.SUCCESS')),
-            "raw_data": self.input().path}
+            "raw_data": luigi.LocalTarget(self.input().path)}
 
 
 class TrainModel(DockerTask):
@@ -101,12 +101,12 @@ class TrainModel(DockerTask):
         pass
 
     def output(self):  
-        directory = os.path.dirname(self.input().path)
+        directory = os.path.dirname(self.input()["data_sets"].path)
         test_set_path = directory + '/test.parquet'
         
         return {"model": luigi.LocalTarget(path=str(Path(self.out_dir) / 'model.sklearn')),
                "test_data": luigi.LocalTarget(path=str(Path(test_set_path))),
-               "raw_data": self.input()["raw_data"].path}
+               "raw_data": luigi.LocalTarget(self.input()["raw_data"].path)}
 
 class EvaluateModel(DockerTask):
     """Evaluates the model and creates a markdown report"""
@@ -124,7 +124,7 @@ class EvaluateModel(DockerTask):
         return [
             'python', 'evaluate_model.py',
             '--model-path', self.input()["model"].path,
-            '--train-set-path', self.input()["train_data"].path,
+            '--test-set-path', self.input()["test_data"].path,
             '--raw-data-path', self.input()["raw_data"].path,
             '--out-dir', self.out_dir 
         ]

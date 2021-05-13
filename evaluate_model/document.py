@@ -93,7 +93,7 @@ raw_set = pd.read_csv(raw_data_dir).drop("Unnamed: 0", errors = "ignore")
 
 #' ## Data Analysis
 #+ echo=False
-histo = raw_set["points"].plot.hist(title = "Lable Distribution")
+histo = raw_set[os.getenv('LABLE_COL')].plot.hist(title = "Lable Distribution")
 plt.show()
 
 #' ### Checking for missing values
@@ -129,8 +129,8 @@ country_slice = raw_set[raw_set["country"].isin(raw_set[raw_set["price"].isna()]
 outlieres_per_category(country_slice, "country", "price", quantile_cutoff = 0.99)
 
 #+ echo=False
-y_test = test_set["points"]
-x_test = test_set.drop(columns = ["points"])
+y_test = test_set[os.getenv('LABLE_COL')]
+x_test = test_set.drop(columns = [os.getenv('LABLE_COL')])
 
 #+ echo=False
 model = pickle.load(open(model_path, 'rb'))

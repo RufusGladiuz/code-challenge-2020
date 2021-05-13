@@ -9,7 +9,7 @@ from pathlib import Path
 
 data_root = Path(os.getenv('PROJECT_ROOT')) / 'data_root'
 
-CONTAINER_TASK_ENV = {}
+CONTAINER_TASK_ENV = {"LABLE_COL": os.getenv('LABLE_COL')}
 CONTAINER_TASK_VOLUMES = {
     str(data_root): {
         'bind': '/usr/share/data/',
