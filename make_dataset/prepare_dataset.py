@@ -14,17 +14,18 @@ from sklearn.preprocessing import(
     StandardScaler
 )
 
-from nltk.corpus import stopwords
-
+from process_settings import ProcessSettings
 
 def join_one_hot_encoding(data: pd.DataFrame, column: str) -> list:
     """ Creates one-hot-encodings for a column and drops that column.
     
-        Args:
+        Parameters
+        ----------
             data: pd.dataFrame -> DataFrame of the main data source
             column: str -> Name of the column to one-hot-encode
         
-        Returns:
+        Returns
+        -------
             Returns the dataframe with one-hot-encodings
     
     """
@@ -38,12 +39,14 @@ def oridnal_encoding(
         to_encode: list):
     """Ordinaly encodes chosen columns
     
-        Args:
+        Parameters
+        ----------
             X_train: pd.DataFrame -> Training dataset
             X_test: pd.DataFrame -> Test dataset
             to_encode: list -> List of columns to encode
     
         Returns
+        -------
             Train and Test set with ordinal encodings
     """
     enc = OrdinalEncoder(unknown_value=-1, handle_unknown="use_encoded_value")
@@ -90,12 +93,14 @@ def _apply_nlp_transformation(
         vectorizer) -> pd.DataFrame:
     """ Applies text feature conversion to a column.
     
-        Args:
+        Parameters
+        ----------
             data: pd.DataFrame -> Pandas Dataframe containing a text column.
             column_name: str -> Name of column holding text.
             vectorizer -> Object of Sk-Learn libary to convert text features.
     
-        Returns:
+        Returns
+        -------
             A dataframe with converted text features
     """
     vectorized_text = vectorizer.transform(data[column_name])
@@ -110,12 +115,14 @@ def normalize_features(
         exclude_columns: list) -> pd.DataFrame:
     """Normalizes features in fashion so that one-hot-encoded features are not affected.
         
-        Args:
+        Parameters
+        ----------
             X_train: pd.DataFrame -> Train dataset as a pd.DataFrame.
             X_test: pd.DataFrame -> Test dataset as a pd.DataFrame.
             exclude_columns: list -> Name of columns to exclude from the normalization.
     
-        Returns:
+        Returns
+        -------
             Scaled Train and Test Datasets.
     
     """
@@ -138,53 +145,24 @@ def normalize_features(
 
 
 def process_data(load_dir: str,
-                 label_column: str,
-                 drop_duplicates: list,
-                 test_size = 0.2,
-                 drop: list = [],
-                 quantile_nan_fill: list = [],
-                 to_one_hot_encode: list = [],
-                 to_ordinal_encode: list = [],
-                 fill_mean: list = [],
-                 normalize = False,
-                 fill_nan: float = -1,
-                 text_column: str = "",
-                 nlp_tool: str = None,
-                 tf_idf_cutoff: float = 0,
-                 tokenizer = None,
-                 stop_words: list = stopwords.words('english'),
-                 token_pattern: str = "[A-Za-z]+",
-                 save_dir: str = None) -> pd.DataFrame:
+                 settings: ProcessSettings,
+                 quantile_nan_fill: list = []) -> pd.DataFrame:
     """Creates the Wine-Score dataset. However can be used to process simular datasets.
     
-        Args:
+        Parameters
+        ----------
             load_dir: str -> Directory to the raw data container as a csv.
-            label_column: str -> Name of the columne that hold the prediction values of the dataset.
-            drop_duplicates: list -> List of column names to consider for dropping duplicates
-            test_size: float = 0.2 -> Size of the test dataset after the test train split.
-            drop: list = [] -> List of column names that should be excluded from the final dataframe.
+            settings: ProcessSettings -> Settings to use for the processing of the data
             quantile_nan_fill: list = [] -> List with objects of class QuantileCutOrder to determine of which columns the nan values should be filled by a quantile of a categorical value.
-            to_one_hot_encode: list = [] -> List of column names that should get an one-hot-encoded.
-            to_ordinal_encode: list = [] -> List of column names that should get an ordinal encoding.
-            fill_mean: list = [] -> List of column names of which the nan values should get filled with the mean of that column.
-            normalize: bool = Flase -> To normalize the dataset or not.
-            fill_nan: float =  -1 -> Value to full Nan values with.
-            text_column: str -> Name of the column that hold text and should get converted to a ML suitable format.
-            nlp_tool: str -> Input need to be either 'tf-idf' (Text frequency, inverse document frequency) or 'bow' (Bag of Words). Will process the column chosen in text_column.
-            tf_idf_cutoff: float -> tf-idf values below the input values well get neglected.
-            tokenizer -> Optinoal Tokenizer object for tokenizing texts.
-            stop_words: list -> List of stopwords to removed from the text. Standard is nltk english stopwords.
-            token_pattern: str -> A regular expression to identify word tokens. Will be ignored if tokenizer is not None.
-            save_dir: str -> A directory to save the dataset to.
-    
-        Returns:
+        Returns
+        -------
             Four dataframes X_train, X_test, y_train, y_test.
     """
 
     # Load Dataset, drop duplicates and drop all columns with no label.
     data = pd.read_csv(load_dir)
-    data = data.drop_duplicates(drop_duplicates)
-    data = data.dropna(subset=[label_column])
+    data = data.drop_duplicates(settings.drop_duplicates)
+    data = data.dropna(subset=[settings.label_column])
 
     # If quantile_nan_fill is set. The chosen column gets filled with the average values considering a categorical feature.
 
@@ -200,64 +178,64 @@ def process_data(load_dir: str,
                                                                                    == cat][order.outlier_column].fillna(cat_mean)
 
     # Filling nan values of chosen columns with there mean.
-    for to_fill in fill_mean:
+    for to_fill in settings.fill_mean:
         data[to_fill] = data[to_fill].fillna(data[to_fill].mean())
 
-    data = data.drop(columns=drop, errors="ignore")
+    data = data.drop(columns=settings.drop, errors="ignore")
     data = data.reset_index(drop=True)
 
-    for column in to_one_hot_encode:
+    for column in settings.to_one_hot_encode:
         data = join_one_hot_encoding(data, column)
 
     # Split dataset into test and train data
     X_train, X_test, y_train, y_test = train_test_split(data.drop(
-        columns=[label_column]), data[label_column], test_size=test_size, random_state=0)
+        columns=[settings.label_column]), data[settings.label_column], test_size=settings.test_size, random_state=0)
     
-    if len(to_ordinal_encode) > 0:
-        X_train, X_test = oridnal_encoding(X_train, X_test, to_ordinal_encode)
+    if len(settings.to_ordinal_encode) > 0:
+        X_train, X_test = oridnal_encoding(X_train, X_test, settings.to_ordinal_encode)
 
     # Converting text features
-    if nlp_tool is None:
-        X_train = X_train.drop(columns=[text_column])
-        X_test = X_test.drop(columns=[text_column])
+    if settings.nlp_tool is None:
+        X_train = X_train.drop(columns=[settings.text_column])
+        X_test = X_test.drop(columns=[settings.text_column])
     else:
-        X_train[text_column] = X_train[text_column].apply(
+        X_train[settings.text_column] = X_train[settings.text_column].apply(
             lambda txt: txt.lower())
-        X_test[text_column] = X_test[text_column].apply(
+        X_test[settings.text_column] = X_test[settings.text_column].apply(
             lambda txt: txt.lower())
-        corpus = X_train[text_column]
+        corpus = X_train[settings.text_column]
 
-        if nlp_tool == "tf-idf":
-            vectorizer = TfidfVectorizer(tokenizer=tokenizer,
+        if settings.nlp_tool == "tf-idf":
+            vectorizer = TfidfVectorizer(tokenizer=settings.tokenizer,
                                          use_idf=True,
-                                         stop_words=stop_words,
-                                         min_df=tf_idf_cutoff,
-                                         token_pattern=token_pattern)
-        if nlp_tool == "bow":
+                                         stop_words=settings.stop_words,
+                                         min_df=settings.tf_idf_cutoff,
+                                         token_pattern=settings.token_pattern)
+        if settings.nlp_tool == "bow":
             vectorizer = CountVectorizer(
-                tokenizer=tokenizer,
-                stop_words=stop_words,
-                token_pattern=token_pattern)
+                tokenizer=settings.tokenizer,
+                stop_words=settings.stop_words,
+                token_pattern=settings.token_pattern)
 
         vectorizer = vectorizer.fit(corpus)
 
-        X_train = _apply_nlp_transformation(X_train, text_column, vectorizer)
-        X_test = _apply_nlp_transformation(X_test, text_column, vectorizer)
+        X_train = _apply_nlp_transformation(X_train, settings.text_column, vectorizer)
+        X_test = _apply_nlp_transformation(X_test, settings.text_column, vectorizer)
 
-        X_train = X_train.fillna(fill_nan)
-        X_test = X_test.fillna(fill_nan)
+        X_train = X_train.fillna(settings.fill_nan)
+        X_test = X_test.fillna(settings.fill_nan)
 
-    if normalize:
+    if settings.normalize:
         X_train, X_test = normalize_features(
-            X_train, X_test, to_one_hot_encode)
+            X_train, X_test, settings.to_one_hot_encode)
 
-    if save_dir is not None:
+    if settings.save_dir is not None:
 
-        if save_dir[-1] == "/" or save_dir[-1] == "\\":
-            save_dir = save_dir[len(save_dir) - 1]
+        if settings.save_dir[-1] == "/" or settings.save_dir[-1] == "\\":
+            save_dir = settings.save_dir[len(settings.save_dir) - 1]
 
         X_train.join(y_train).to_csv(
-            f"{save_dir}/train_set_{label_column}.csv")
-        X_test.join(y_test).to_csv(f"{save_dir}/test_set_{label_column}.csv")
+            f"{save_dir}/train_set_{settings.label_column}.csv")
+        X_test.join(y_test).to_csv(f"{save_dir}/test_set_{settings.label_column}.csv")
 
     return X_train, X_test, y_train, y_test

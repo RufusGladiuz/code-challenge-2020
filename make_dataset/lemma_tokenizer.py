@@ -5,11 +5,10 @@ import re
 class LemmaTokenizer(object):
     """ Custom Token Lemmatizer using WordNetLemmatizer.
     
-        Args:
+        Parameters
+        ----------
             lemmatizer -> A lemmatizer object
             stopwords:list -> List of stopwords to remove from articles
-        
-    
     """
     
     def __init__(self, lemmatizer=WordNetLemmatizer(),

@@ -76,27 +76,25 @@ file_json_path = os.getenv('JSON_FILE')
 #+ echo=False
 model_path = ""
 test_data_path = ""
-train_data_path = ""
 raw_data_dir = ""
 
 #+ echo=False
 with open(file_json_path) as json_file:
     data = json.load(json_file)
     model_path = data["model_dir"]
-    train_data_path = data["train_set_dir"]
     test_data_path = data["test_set_dir"]
     raw_data_dir = data["raw_data_dir"] 
 
 #+ echo=False
 metrics = ["Model", "MAE", "RMSE", "R2"]
 result_metrics = ["SVM"]
-train_set = pd.read_parquet(train_data_path)
 test_set = pd.read_parquet(test_data_path)
-raw_set = pd.read_csv(raw_data_dir)
+raw_set = pd.read_csv(raw_data_dir).drop("Unnamed: 0", errors = "ignore")
 
 #' ## Data Analysis
 #+ echo=False
-raw_set["points"].plot.hist(title = "Lable Distribution")
+histo = raw_set["points"].plot.hist(title = "Lable Distribution")
+plt.show()
 
 #' ### Checking for missing values
 #+ echo=False
@@ -111,13 +109,11 @@ plt.show()
 #' Designation has to many missing values, thus is not suiteable for a prediction
 #' Same for region_1 and region_2
 #' The title will also be neglected, as it is hard to draw any correlations from it, since it is individual for each wine
-#+ echo=False
-raw_set[(raw_set["taster_name"].isna()) & (~raw_set["taster_twitter_handle"].isna())]
 
 #' See if taster name can be filled by using the corresponding twitter handle
 #' They can not, sadly
 #+ echo=False
-print(raw_set[(raw_set["taster_name"].isna()) & (~raw_set["taster_twitter_handle"].isna())])
+print(f"Number of taster_name that is nan but has a twitter handle {len(raw_set[(raw_set['taster_name'].isna()) & (~raw_set['taster_twitter_handle'].isna())])}" )
 
 #' The plan is to fill the prices by the countries price average
 #' Investigating the countries of the missing prices

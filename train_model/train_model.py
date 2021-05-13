@@ -9,12 +9,22 @@ from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 
-
 @click.command()
 @click.option('--X-train')
 @click.option('--save-dir')
 def train_model(x_train, save_dir):
-    
+    """Takes a train data set and trains a svm model
+
+    Parameters
+    ----------
+        x_train: str
+            The preprocessed train dataset
+        save_dir:
+            Direcotry in which the model gets saved
+    Returns
+    -------
+    None
+    """
     save_path = Path(save_dir)
     save_path.mkdir(parents=True, exist_ok=True)
 
