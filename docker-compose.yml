@@ -33,6 +33,7 @@ services:
     environment:
       - PROJECT_ROOT=$PWD
       - LABLE_COL=$LABLE_COL
+      - SHARE=$SHARE
       - PIPELINE_VERSION=0.1
       - ORCHESTRATOR_NETWORK=code-challenge-2020_default
     volumes:

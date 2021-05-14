@@ -25,7 +25,7 @@ class Debug(DockerTask):
 class DownloadData(DockerTask):
     """Initial pipeline task downloads dataset."""
     fname = luigi.Parameter(default='wine_dataset')
-    out_dir = luigi.Parameter(default='/usr/share/data/raw/')
+    out_dir = luigi.Parameter(default=os.getenv("SHARE") + 'raw/')
     url = luigi.Parameter(
         default='https://github.com/datarevenue-berlin/code-challenge-2019/'
                 'releases/download/0.1.0/dataset_sampled.csv'
@@ -70,12 +70,10 @@ class MakeDatasets(DockerTask):
             '--in-csv', self.input().path,
             '--out-dir', self.out_dir
         ]
-        pass
     
 
     def output(self):
-        return{"data_sets": luigi.LocalTarget(path=str(Path(self.out_dir) / '.SUCCESS')),
-            "raw_data": luigi.LocalTarget(self.input().path)}
+        return luigi.LocalTarget(path=str(Path(self.out_dir) / '.SUCCESS'))
 
 
 class TrainModel(DockerTask):
@@ -91,22 +89,16 @@ class TrainModel(DockerTask):
 
     @property
     def command(self):
-        directory = os.path.dirname(self.input()["data_sets"].path)
+        directory = os.path.dirname(self.input().path)
         train_set_path = directory + '/train.parquet'
         return [
             'python', 'train_model.py',
             '--X-train', train_set_path,
             '--save-dir', self.out_dir 
         ]
-        pass
 
-    def output(self):  
-        directory = os.path.dirname(self.input()["data_sets"].path)
-        test_set_path = directory + '/test.parquet'
-        
-        return {"model": luigi.LocalTarget(path=str(Path(self.out_dir) / 'model.sklearn')),
-               "test_data": luigi.LocalTarget(path=str(Path(test_set_path))),
-               "raw_data": luigi.LocalTarget(self.input()["raw_data"].path)}
+    def output(self):
+        return luigi.LocalTarget(path=str(Path(self.out_dir) / 'model.sklearn'))
 
 class EvaluateModel(DockerTask):
     """Evaluates the model and creates a markdown report"""
@@ -123,12 +115,8 @@ class EvaluateModel(DockerTask):
     def command(self):
         return [
             'python', 'evaluate_model.py',
-            '--model-path', self.input()["model"].path,
-            '--test-set-path', self.input()["test_data"].path,
-            '--raw-data-path', self.input()["raw_data"].path,
             '--out-dir', self.out_dir 
         ]
-        pass
 
     def output(self):
         return luigi.LocalTarget(

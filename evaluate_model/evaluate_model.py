@@ -33,21 +33,12 @@ def _clean_up_report(report:str) -> str:
     return report
 
 @click.command()
-@click.option('--model-path')
-@click.option('--test-set-path') 
-@click.option('--raw-data-path')
 @click.option('--out-dir')
-def evaluate_model(model_path:str, test_set_path:str, raw_data_path:str, out_dir:str) -> None:
+def evaluate_model(out_dir:str) -> None:
     """Takes the saved model and the test data set to evaluate the model and create a report
 
     Parameters
     ----------
-    model_path: str
-        Path to the model file including the filename
-    test_set_path: str
-        Path to test dataset including the filename
-    raw_data_path:
-        Path to raw datasat inclding the filename
     out_dir:
         Directory to save files to, no filename included
     Returns
@@ -59,16 +50,7 @@ def evaluate_model(model_path:str, test_set_path:str, raw_data_path:str, out_dir
 
     if os.path.exists(out_dir) == False:
         os.makedirs(out_dir)
-    
-    # creating a json file of file paths to hand to the document execution
-    path_json = {}
-    path_json["model_dir"] = model_path
-    path_json["test_set_dir"] = test_set_path
-    path_json["raw_data_dir"] = raw_data_path
-    
-    with open(os.getenv('JSON_FILE'), 'w+') as outfile:
-        json.dump(path_json, outfile)
-   
+
     # Running the report creation 
     pweave.weave(file = "./document.py", 
                 informat = "script", 

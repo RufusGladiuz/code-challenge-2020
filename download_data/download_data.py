@@ -6,6 +6,8 @@ import urllib.request
 
 import os
 
+import json
+
 logging.basicConfig(level=logging.INFO)
 
 @click.command()
@@ -36,13 +38,19 @@ def download_data(name, url, out_dir):
 
     log.info('Downloading dataset')
     log.info(f'Will write to {out_path}')
-    log.info(f"Path exists: {os.path.exists(out_dir)}")
 
     if os.path.exists(out_dir) == False:
         os.makedirs(out_dir)
     
     log.info(f"Lable Column: {os.getenv('LABLE_COL')}")
-    urllib.request.urlretrieve(url, out_path)
+    urllib.request.urlretrieve(url, str(out_path))
+
+    # Saving path of output file to json
+    path_json = {}
+    path_json["raw_data_dir"] = str(out_path)
+
+    with open(os.getenv("SHARED_FILES"), 'w+') as files:
+        json.dump(path_json, files)
 
 
 if __name__ == '__main__':

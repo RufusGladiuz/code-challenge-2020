@@ -9,7 +9,10 @@ from pathlib import Path
 
 data_root = Path(os.getenv('PROJECT_ROOT')) / 'data_root'
 
-CONTAINER_TASK_ENV = {"LABLE_COL": os.getenv('LABLE_COL')}
+# Adding name of the label column to the environment
+CONTAINER_TASK_ENV = {"LABLE_COL": os.getenv('LABLE_COL'),
+                     "SHARE": os.getenv("SHARE"),
+                     "SHARED_FILES": os.getenv("SHARE") + "files.json"}
 CONTAINER_TASK_VOLUMES = {
     str(data_root): {
         'bind': '/usr/share/data/',

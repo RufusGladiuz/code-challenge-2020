@@ -79,11 +79,10 @@ test_data_path = ""
 raw_data_dir = ""
 
 #+ echo=False
-with open(file_json_path) as json_file:
-    data = json.load(json_file)
-    model_path = data["model_dir"]
-    test_data_path = data["test_set_dir"]
-    raw_data_dir = data["raw_data_dir"] 
+data = json.load(open(os.getenv("SHARED_FILES"), "r"))
+model_path = data["model_dir"]
+test_data_path = data["test_set_dir"]
+raw_data_dir = data["raw_data_dir"] 
 
 #+ echo=False
 metrics = ["Model", "MAE", "RMSE", "R2"]
