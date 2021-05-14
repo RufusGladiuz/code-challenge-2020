@@ -1,0 +1,374 @@
+ 
+Sending build context to Docker daemon  6.144kB
+Step 1/6 : FROM python:3.6-alpine
+ ---> 118f82a946c9
+Step 2/6 : ENV LC_ALL=C.UTF-8
+ ---> Running in 5743e7079966
+Removing intermediate container 5743e7079966
+ ---> da3371e6e48f
+Step 3/6 : ENV LANG=C.UTF-8
+ ---> Running in a133be61ece5
+Removing intermediate container a133be61ece5
+ ---> c487975a3cf2
+Step 4/6 : COPY . /opt/download_data/
+ ---> 89d81f067927
+Step 5/6 : RUN pip install -r /opt/download_data/requirements.txt
+ ---> Running in 58c84d7db6a5
+Collecting click>=7.0
+  Downloading click-8.0.0-py3-none-any.whl (96 kB)
+Installing collected packages: click
+Successfully installed click-8.0.0
+[91mWARNING: Running pip as root will break packages and permissions. You should install packages reliably by using venv: https://pip.pypa.io/warnings/venv
+[0mRemoving intermediate container 58c84d7db6a5
+ ---> b7c0f7114729
+Step 6/6 : WORKDIR /opt/download_data/
+ ---> Running in fb28c596ff89
+Removing intermediate container fb28c596ff89
+ ---> 5820a0a88ba8
+Successfully built 5820a0a88ba8
+Successfully tagged code-challenge/download-data:0.1
+Sending build context to Docker daemon  23.55kB
+Step 1/8 : FROM drtools/dask:latest
+ ---> e57f30a548cf
+Step 2/8 : COPY . /opt/make_dataset
+ ---> 23e1cb55e4b4
+Step 3/8 : USER root
+ ---> Running in e18d789c0e83
+Removing intermediate container e18d789c0e83
+ ---> 2374c8238049
+Step 4/8 : RUN pip install --upgrade pip
+ ---> Running in 6bef6c0bc13d
+Collecting pip
+  Downloading https://files.pythonhosted.org/packages/cd/6f/43037c7bcc8bd8ba7c9074256b1a11596daa15555808ec748048c1507f08/pip-21.1.1-py3-none-any.whl (1.5MB)
+[91mfastparquet 0.2.1 requires pytest-runner, which is not installed.
+[0mInstalling collected packages: pip
+  Found existing installation: pip 10.0.1
+    Uninstalling pip-10.0.1:
+      Successfully uninstalled pip-10.0.1
+Successfully installed pip-21.1.1
+Removing intermediate container 6bef6c0bc13d
+ ---> f1e06d42c911
+Step 5/8 : RUN pip install -r /opt/make_dataset/requirements.txt
+ ---> Running in 994cb15d4731
+Requirement already satisfied: pandas in /opt/conda/lib/python3.6/site-packages (from -r /opt/make_dataset/requirements.txt (line 1)) (0.24.2)
+Collecting matplotlib
+  Downloading matplotlib-3.3.4-cp36-cp36m-manylinux1_x86_64.whl (11.5 MB)
+Collecting nltk==3.6.2
+  Downloading nltk-3.6.2-py3-none-any.whl (1.5 MB)
+Collecting numpy==1.18
+  Downloading numpy-1.18.0-cp36-cp36m-manylinux1_x86_64.whl (20.1 MB)
+Collecting scipy==1.1.0
+  Downloading scipy-1.1.0-cp36-cp36m-manylinux1_x86_64.whl (31.2 MB)
+Collecting scikit-learn==0.24.2
+  Downloading scikit_learn-0.24.2-cp36-cp36m-manylinux2010_x86_64.whl (22.2 MB)
+Collecting python-snappy
+  Downloading python_snappy-0.6.0-cp36-cp36m-manylinux2010_x86_64.whl (54 kB)
+Collecting pyarrow
+  Downloading pyarrow-4.0.0-cp36-cp36m-manylinux2014_x86_64.whl (21.9 MB)
+Collecting dataclasses
+  Downloading dataclasses-0.8-py3-none-any.whl (19 kB)
+Collecting tqdm
+  Downloading tqdm-4.60.0-py2.py3-none-any.whl (75 kB)
+Collecting joblib
+  Downloading joblib-1.0.1-py3-none-any.whl (303 kB)
+Requirement already satisfied: click in /opt/conda/lib/python3.6/site-packages (from nltk==3.6.2->-r /opt/make_dataset/requirements.txt (line 4)) (7.0)
+Collecting regex
+  Downloading regex-2021.4.4-cp36-cp36m-manylinux2014_x86_64.whl (722 kB)
+Collecting threadpoolctl>=2.0.0
+  Downloading threadpoolctl-2.1.0-py3-none-any.whl (12 kB)
+Requirement already satisfied: python-dateutil>=2.5.0 in /opt/conda/lib/python3.6/site-packages (from pandas->-r /opt/make_dataset/requirements.txt (line 1)) (2.8.0)
+Requirement already satisfied: pytz>=2011k in /opt/conda/lib/python3.6/site-packages (from pandas->-r /opt/make_dataset/requirements.txt (line 1)) (2018.9)
+Requirement already satisfied: six>=1.5 in /opt/conda/lib/python3.6/site-packages (from python-dateutil>=2.5.0->pandas->-r /opt/make_dataset/requirements.txt (line 1)) (1.11.0)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.3 in /opt/conda/lib/python3.6/site-packages (from matplotlib->-r /opt/make_dataset/requirements.txt (line 2)) (2.3.1)
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.3.1-cp36-cp36m-manylinux1_x86_64.whl (1.1 MB)
+Collecting cycler>=0.10
+  Downloading cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
+Collecting pillow>=6.2.0
+  Downloading Pillow-8.2.0-cp36-cp36m-manylinux1_x86_64.whl (3.0 MB)
+Installing collected packages: numpy, tqdm, threadpoolctl, scipy, regex, pillow, kiwisolver, joblib, cycler, scikit-learn, python-snappy, pyarrow, nltk, matplotlib, dataclasses
+  Attempting uninstall: numpy
+    Found existing installation: numpy 1.13.3
+    Uninstalling numpy-1.13.3:
+      Successfully uninstalled numpy-1.13.3
+  Attempting uninstall: scipy
+    Found existing installation: scipy 0.19.1
+    Uninstalling scipy-0.19.1:
+      Successfully uninstalled scipy-0.19.1
+  Attempting uninstall: pillow
+    Found existing installation: Pillow 6.0.0
+    Uninstalling Pillow-6.0.0:
+      Successfully uninstalled Pillow-6.0.0
+  Attempting uninstall: scikit-learn
+    Found existing installation: scikit-learn 0.20.3
+    Uninstalling scikit-learn-0.20.3:
+      Successfully uninstalled scikit-learn-0.20.3
+[91mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+fastparquet 0.2.1 requires pytest-runner, which is not installed.
+[0mSuccessfully installed cycler-0.10.0 dataclasses-0.8 joblib-1.0.1 kiwisolver-1.3.1 matplotlib-3.3.4 nltk-3.6.2 numpy-1.18.0 pillow-8.2.0 pyarrow-4.0.0 python-snappy-0.6.0 regex-2021.4.4 scikit-learn-0.24.2 scipy-1.1.0 threadpoolctl-2.1.0 tqdm-4.60.0
+[91mWARNING: Running pip as root will break packages and permissions. You should install packages reliably by using venv: https://pip.pypa.io/warnings/venv
+[0mRemoving intermediate container 994cb15d4731
+ ---> 08de26e03389
+Step 6/8 : RUN python -m nltk.downloader stopwords
+ ---> Running in 2d4362e60516
+[91m/opt/conda/lib/python3.6/runpy.py:125: RuntimeWarning: 'nltk.downloader' found in sys.modules after import of package 'nltk', but prior to execution of 'nltk.downloader'; this may result in unpredictable behaviour
+  warn(RuntimeWarning(msg))
+[nltk_data] Downloading package stopwords to /root/nltk_data...
+[nltk_data]   Unzipping corpora/stopwords.zip.
+[0mRemoving intermediate container 2d4362e60516
+ ---> 630da54bf01f
+Step 7/8 : RUN python -m nltk.downloader wordnet
+ ---> Running in 2933479c3f0a
+[91m/opt/conda/lib/python3.6/runpy.py:125: RuntimeWarning: 'nltk.downloader' found in sys.modules after import of package 'nltk', but prior to execution of 'nltk.downloader'; this may result in unpredictable behaviour
+  warn(RuntimeWarning(msg))
+[nltk_data] Downloading package wordnet to /root/nltk_data...
+[nltk_data]   Unzipping corpora/wordnet.zip.
+[0mRemoving intermediate container 2933479c3f0a
+ ---> d26fdd528b80
+Step 8/8 : WORKDIR /opt/make_dataset
+ ---> Running in 32fb1b2ca7ce
+Removing intermediate container 32fb1b2ca7ce
+ ---> 7bcf3e4735b0
+Successfully built 7bcf3e4735b0
+Successfully tagged code-challenge/make-dataset:0.1
+Sending build context to Docker daemon  5.632kB
+Step 1/8 : FROM python:3.9
+ ---> a6a0779c5fb2
+Step 2/8 : ENV LC_ALL=C.UTF-8
+ ---> Running in 128e5ebc68b4
+Removing intermediate container 128e5ebc68b4
+ ---> 6fb6d98f49d4
+Step 3/8 : ENV LANG=C.UTF-8
+ ---> Running in 0ed9a7608710
+Removing intermediate container 0ed9a7608710
+ ---> 701d491b35dd
+Step 4/8 : ENV PYTHONPATH=/opt/orchestrator:$PYTHONPATH
+ ---> Running in 978de31bd131
+Removing intermediate container 978de31bd131
+ ---> 0a2561a06ebd
+Step 5/8 : COPY . /opt/train_model/
+ ---> 0fe9eedde0ac
+Step 6/8 : RUN pip install --upgrade pip
+ ---> Running in 742a2e16327d
+Requirement already satisfied: pip in /usr/local/lib/python3.9/site-packages (21.1.1)
+[91mWARNING: Running pip as root will break packages and permissions. You should install packages reliably by using venv: https://pip.pypa.io/warnings/venv
+[0mRemoving intermediate container 742a2e16327d
+ ---> b2a671f9ea4d
+Step 7/8 : RUN python -m pip install -r /opt/train_model/requirements.txt
+ ---> Running in 0a0226a3f740
+Collecting click>=7.0
+  Downloading click-8.0.0-py3-none-any.whl (96 kB)
+Collecting pandas
+  Downloading pandas-1.2.4-cp39-cp39-manylinux1_x86_64.whl (9.7 MB)
+Collecting numpy>=1.18
+  Downloading numpy-1.20.3-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (15.4 MB)
+Collecting scipy>=1.1.0
+  Downloading scipy-1.6.3-cp39-cp39-manylinux1_x86_64.whl (27.3 MB)
+Collecting scikit-learn==0.24.2
+  Downloading scikit_learn-0.24.2-cp39-cp39-manylinux2010_x86_64.whl (23.8 MB)
+Collecting python-snappy
+  Downloading python_snappy-0.6.0-cp39-cp39-manylinux2010_x86_64.whl (54 kB)
+Collecting pyarrow
+  Downloading pyarrow-4.0.0-cp39-cp39-manylinux2014_x86_64.whl (21.9 MB)
+Collecting joblib>=0.11
+  Downloading joblib-1.0.1-py3-none-any.whl (303 kB)
+Collecting threadpoolctl>=2.0.0
+  Downloading threadpoolctl-2.1.0-py3-none-any.whl (12 kB)
+Collecting python-dateutil>=2.7.3
+  Downloading python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+Collecting pytz>=2017.3
+  Downloading pytz-2021.1-py2.py3-none-any.whl (510 kB)
+Collecting six>=1.5
+  Downloading six-1.16.0-py2.py3-none-any.whl (11 kB)
+Installing collected packages: six, numpy, threadpoolctl, scipy, pytz, python-dateutil, joblib, scikit-learn, python-snappy, pyarrow, pandas, click
+Successfully installed click-8.0.0 joblib-1.0.1 numpy-1.20.3 pandas-1.2.4 pyarrow-4.0.0 python-dateutil-2.8.1 python-snappy-0.6.0 pytz-2021.1 scikit-learn-0.24.2 scipy-1.6.3 six-1.16.0 threadpoolctl-2.1.0
+[91mWARNING: Running pip as root will break packages and permissions. You should install packages reliably by using venv: https://pip.pypa.io/warnings/venv
+[0mRemoving intermediate container 0a0226a3f740
+ ---> 8351d76c0d64
+Step 8/8 : WORKDIR /opt/train_model/
+ ---> Running in d4f8e090a689
+Removing intermediate container d4f8e090a689
+ ---> 84fe46212085
+Successfully built 84fe46212085
+Successfully tagged code-challenge/train-model:0.1
+Sending build context to Docker daemon  11.78kB
+Step 1/8 : FROM python:3.9
+ ---> a6a0779c5fb2
+Step 2/8 : ENV LC_ALL=C.UTF-8
+ ---> Running in 6470a9264d2f
+Removing intermediate container 6470a9264d2f
+ ---> 0bf1ae329e39
+Step 3/8 : ENV LANG=C.UTF-8
+ ---> Running in 608dd6f4399e
+Removing intermediate container 608dd6f4399e
+ ---> e90ba1024103
+Step 4/8 : ENV JSON_FILE=./files.json
+ ---> Running in af1f933e5024
+Removing intermediate container af1f933e5024
+ ---> d1208b9fe274
+Step 5/8 : ENV PYTHONPATH=/opt/orchestrator:$PYTHONPATH
+ ---> Running in 6e274ce4a94a
+Removing intermediate container 6e274ce4a94a
+ ---> 1e845ced6b89
+Step 6/8 : COPY . /opt/evaluate_model/
+ ---> e1ca191a7eae
+Step 7/8 : RUN python -m pip install -r /opt/evaluate_model/requirements.txt
+ ---> Running in 1e9c307ee2db
+Collecting click>=7.0
+  Downloading click-8.0.0-py3-none-any.whl (96 kB)
+Collecting pandas
+  Downloading pandas-1.2.4-cp39-cp39-manylinux1_x86_64.whl (9.7 MB)
+Collecting numpy>=1.18
+  Downloading numpy-1.20.3-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (15.4 MB)
+Collecting scipy>=1.1.0
+  Downloading scipy-1.6.3-cp39-cp39-manylinux1_x86_64.whl (27.3 MB)
+Collecting scikit-learn==0.24.2
+  Downloading scikit_learn-0.24.2-cp39-cp39-manylinux2010_x86_64.whl (23.8 MB)
+Collecting seaborn
+  Downloading seaborn-0.11.1-py3-none-any.whl (285 kB)
+Collecting python-snappy
+  Downloading python_snappy-0.6.0-cp39-cp39-manylinux2010_x86_64.whl (54 kB)
+Collecting pyarrow
+  Downloading pyarrow-4.0.0-cp39-cp39-manylinux2014_x86_64.whl (21.9 MB)
+Collecting Pweave==0.30.3
+  Downloading Pweave-0.30.3-py2.py3-none-any.whl (125 kB)
+Collecting threadpoolctl>=2.0.0
+  Downloading threadpoolctl-2.1.0-py3-none-any.whl (12 kB)
+Collecting joblib>=0.11
+  Downloading joblib-1.0.1-py3-none-any.whl (303 kB)
+Collecting nbconvert
+  Downloading nbconvert-6.0.7-py3-none-any.whl (552 kB)
+Collecting nbformat
+  Downloading nbformat-5.1.3-py3-none-any.whl (178 kB)
+Collecting jupyter-client
+  Downloading jupyter_client-6.1.12-py3-none-any.whl (112 kB)
+Collecting pygments
+  Downloading Pygments-2.9.0-py3-none-any.whl (1.0 MB)
+Collecting ipython>=6.0
+  Downloading ipython-7.23.1-py3-none-any.whl (785 kB)
+Collecting ipykernel
+  Downloading ipykernel-5.5.5-py3-none-any.whl (120 kB)
+Collecting markdown
+  Downloading Markdown-3.3.4-py3-none-any.whl (97 kB)
+Collecting backcall
+  Downloading backcall-0.2.0-py2.py3-none-any.whl (11 kB)
+Collecting pickleshare
+  Downloading pickleshare-0.7.5-py2.py3-none-any.whl (6.9 kB)
+Collecting jedi>=0.16
+  Downloading jedi-0.18.0-py2.py3-none-any.whl (1.4 MB)
+Collecting matplotlib-inline
+  Downloading matplotlib_inline-0.1.2-py3-none-any.whl (8.2 kB)
+Requirement already satisfied: setuptools>=18.5 in /usr/local/lib/python3.9/site-packages (from ipython>=6.0->Pweave==0.30.3->-r /opt/evaluate_model/requirements.txt (line 13)) (56.2.0)
+Collecting traitlets>=4.2
+  Downloading traitlets-5.0.5-py3-none-any.whl (100 kB)
+Collecting pexpect>4.3
+  Downloading pexpect-4.8.0-py2.py3-none-any.whl (59 kB)
+Collecting decorator
+  Downloading decorator-5.0.7-py3-none-any.whl (8.8 kB)
+Collecting prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0
+  Downloading prompt_toolkit-3.0.18-py3-none-any.whl (367 kB)
+Collecting parso<0.9.0,>=0.8.0
+  Downloading parso-0.8.2-py2.py3-none-any.whl (94 kB)
+Collecting ptyprocess>=0.5
+  Downloading ptyprocess-0.7.0-py2.py3-none-any.whl (13 kB)
+Collecting wcwidth
+  Downloading wcwidth-0.2.5-py2.py3-none-any.whl (30 kB)
+Collecting ipython-genutils
+  Downloading ipython_genutils-0.2.0-py2.py3-none-any.whl (26 kB)
+Collecting python-dateutil>=2.7.3
+  Downloading python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+Collecting pytz>=2017.3
+  Downloading pytz-2021.1-py2.py3-none-any.whl (510 kB)
+Collecting six>=1.5
+  Downloading six-1.16.0-py2.py3-none-any.whl (11 kB)
+Collecting matplotlib>=2.2
+  Downloading matplotlib-3.4.2-cp39-cp39-manylinux1_x86_64.whl (10.3 MB)
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.3.1-cp39-cp39-manylinux1_x86_64.whl (1.2 MB)
+Collecting pillow>=6.2.0
+  Downloading Pillow-8.2.0-cp39-cp39-manylinux1_x86_64.whl (3.0 MB)
+Collecting pyparsing>=2.2.1
+  Downloading pyparsing-2.4.7-py2.py3-none-any.whl (67 kB)
+Collecting cycler>=0.10
+  Downloading cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
+[91mERROR: Exception:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/urllib3/response.py", line 438, in _error_catcher
+    yield
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/urllib3/response.py", line 519, in read
+    data = self._fp.read(amt) if not fp_closed else b""
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/cachecontrol/filewrapper.py", line 62, in read
+    data = self.__fp.read(amt)
+  File "/usr/local/lib/python3.9/http/client.py", line 455, in read
+    n = self.readinto(b)
+  File "/usr/local/lib/python3.9/http/client.py", line 499, in readinto
+    n = self.fp.readinto(b)
+  File "/usr/local/lib/python3.9/socket.py", line 704, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.9/ssl.py", line 1241, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/local/lib/python3.9/ssl.py", line 1099, in read
+    return self._sslobj.read(len, buffer)
+socket.timeout: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/cli/base_command.py", line 180, in _main
+    status = self.run(options, args)
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/cli/req_command.py", line 204, in wrapper
+    return func(self, options, args)
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/commands/install.py", line 318, in run
+    requirement_set = resolver.resolve(
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/resolver.py", line 127, in resolve
+    result = self._result = resolver.resolve(
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/resolvelib/resolvers.py", line 473, in resolve
+    state = resolution.resolve(requirements, max_rounds=max_rounds)
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/resolvelib/resolvers.py", line 367, in resolve
+    failure_causes = self._attempt_to_pin_criterion(name)
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/resolvelib/resolvers.py", line 213, in _attempt_to_pin_criterion
+    criteria = self._get_criteria_to_update(candidate)
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/resolvelib/resolvers.py", line 203, in _get_criteria_to_update
+    name, crit = self._merge_into_criterion(r, parent=candidate)
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/resolvelib/resolvers.py", line 172, in _merge_into_criterion
+    if not criterion.candidates:
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/resolvelib/structs.py", line 139, in __bool__
+    return bool(self._sequence)
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/found_candidates.py", line 143, in __bool__
+    return any(self)
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/found_candidates.py", line 129, in <genexpr>
+    return (c for c in iterator if id(c) not in self._incompatible_ids)
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/found_candidates.py", line 33, in _iter_built
+    candidate = func()
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/factory.py", line 200, in _make_candidate_from_link
+    self._link_candidate_cache[link] = LinkCandidate(
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/candidates.py", line 306, in __init__
+    super().__init__(
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/candidates.py", line 151, in __init__
+    self.dist = self._prepare()
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/candidates.py", line 234, in _prepare
+    dist = self._prepare_distribution()
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/resolution/resolvelib/candidates.py", line 317, in _prepare_distribution
+    return self._factory.preparer.prepare_linked_requirement(
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/operations/prepare.py", line 508, in prepare_linked_requirement
+    return self._prepare_linked_requirement(req, parallel_builds)
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/operations/prepare.py", line 550, in _prepare_linked_requirement
+    local_file = unpack_url(
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/operations/prepare.py", line 239, in unpack_url
+    file = get_http_url(
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/operations/prepare.py", line 102, in get_http_url
+    from_path, content_type = download(link, temp_dir.path)
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/network/download.py", line 157, in __call__
+    for chunk in chunks:
+  File "/usr/local/lib/python3.9/site-packages/pip/_internal/network/utils.py", line 62, in response_chunks
+    for chunk in response.raw.stream(
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/urllib3/response.py", line 576, in stream
+    data = self.read(amt=amt, decode_content=decode_content)
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/urllib3/response.py", line 541, in read
+    raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+  File "/usr/local/lib/python3.9/contextlib.py", line 135, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/usr/local/lib/python3.9/site-packages/pip/_vendor/urllib3/response.py", line 443, in _error_catcher
+    raise ReadTimeoutError(self._pool, None, "Read timed out.")
+pip._vendor.urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='files.pythonhosted.org', port=443): Read timed out.
+[0m

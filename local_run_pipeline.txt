@@ -1,0 +1,92 @@
+ 
+Attaching to code-challenge-2020_orchestrator_1
+[36morchestrator_1    |[0m DEBUG: Checking if EvaluateModel(no_remove_finished=False, out_dir=/usr/share/data/report/) is complete
+[36morchestrator_1    |[0m DEBUG: Checking if TrainModel(no_remove_finished=False, out_dir=/usr/share/data/model/) is complete
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   EvaluateModel_False__usr_share_data__9b6bd538aa   has status   PENDING
+[36morchestrator_1    |[0m DEBUG: Checking if MakeDatasets(no_remove_finished=False, out_dir=/usr/share/data/refined/) is complete
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   TrainModel_False__usr_share_data__5994bb2ebd   has status   PENDING
+[36morchestrator_1    |[0m DEBUG: Checking if DownloadData(no_remove_finished=False, fname=wine_dataset, out_dir=/usr/share/data/raw/, url=https://github.com/datarevenue-berlin/code-challenge-2019/releases/download/0.1.0/dataset_sampled.csv) is complete
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   MakeDatasets_False__usr_share_data__75e6138a41   has status   PENDING
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   DownloadData_wine_dataset_False__usr_share_data__79bc385f2e   has status   PENDING
+[36morchestrator_1    |[0m INFO: Done scheduling tasks
+[36morchestrator_1    |[0m INFO: Running Worker with 1 processes
+[36morchestrator_1    |[0m DEBUG: Asking scheduler for work...
+[36morchestrator_1    |[0m DEBUG: Pending tasks: 4
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) running   DownloadData(no_remove_finished=False, fname=wine_dataset, out_dir=/usr/share/data/raw/, url=https://github.com/datarevenue-berlin/code-challenge-2019/releases/download/0.1.0/dataset_sampled.csv)
+[36morchestrator_1    |[0m INFO: INFO:download-data:Downloading dataset
+[36morchestrator_1    |[0m INFO: INFO:download-data:Will write to /usr/share/data/raw/wine_dataset.csv
+[36morchestrator_1    |[0m INFO: INFO:download-data:Lable Column: points
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) done      DownloadData(no_remove_finished=False, fname=wine_dataset, out_dir=/usr/share/data/raw/, url=https://github.com/datarevenue-berlin/code-challenge-2019/releases/download/0.1.0/dataset_sampled.csv)
+[36morchestrator_1    |[0m DEBUG: 1 running tasks, waiting for next task to finish
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   DownloadData_wine_dataset_False__usr_share_data__79bc385f2e   has status   DONE
+[36morchestrator_1    |[0m DEBUG: Asking scheduler for work...
+[36morchestrator_1    |[0m DEBUG: Pending tasks: 3
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) running   MakeDatasets(no_remove_finished=False, out_dir=/usr/share/data/refined/)
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) done      MakeDatasets(no_remove_finished=False, out_dir=/usr/share/data/refined/)
+[36morchestrator_1    |[0m DEBUG: 1 running tasks, waiting for next task to finish
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   MakeDatasets_False__usr_share_data__75e6138a41   has status   DONE
+[36morchestrator_1    |[0m DEBUG: Asking scheduler for work...
+[36morchestrator_1    |[0m DEBUG: Pending tasks: 2
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) running   TrainModel(no_remove_finished=False, out_dir=/usr/share/data/model/)
+[36morchestrator_1    |[0m INFO: INFO:train-model:Training time: 1.5166666666666666 min
+[36morchestrator_1    |[0m INFO: INFO:train-model:Saving model at /usr/share/data/model
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) done      TrainModel(no_remove_finished=False, out_dir=/usr/share/data/model/)
+[36morchestrator_1    |[0m DEBUG: 1 running tasks, waiting for next task to finish
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   TrainModel_False__usr_share_data__5994bb2ebd   has status   DONE
+[36morchestrator_1    |[0m DEBUG: Asking scheduler for work...
+[36morchestrator_1    |[0m DEBUG: Pending tasks: 1
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) running   EvaluateModel(no_remove_finished=False, out_dir=/usr/share/data/report/)
+[36morchestrator_1    |[0m INFO: INFO:matplotlib.font_manager:generated new fontManager
+[36morchestrator_1    |[0m INFO: status
+[36morchestrator_1    |[0m INFO: Processing chunk 1 named None from line 16
+[36morchestrator_1    |[0m INFO: Processing chunk 2 named None from line 73
+[36morchestrator_1    |[0m INFO: Processing chunk 3 named None from line 76
+[36morchestrator_1    |[0m INFO: Processing chunk 4 named None from line 81
+[36morchestrator_1    |[0m INFO: Processing chunk 5 named None from line 87
+[36morchestrator_1    |[0m INFO: Processing chunk 6 named None from line 87
+[36morchestrator_1    |[0m INFO: Processing chunk 7 named None from line 94
+[36morchestrator_1    |[0m INFO: Processing chunk 8 named None from line 99
+[36morchestrator_1    |[0m INFO: Processing chunk 9 named None from line 114
+[36morchestrator_1    |[0m INFO: Processing chunk 10 named None from line 119
+[36morchestrator_1    |[0m INFO: Processing chunk 11 named None from line 130
+[36morchestrator_1    |[0m INFO: Processing chunk 12 named None from line 134
+[36morchestrator_1    |[0m INFO: Processing chunk 13 named None from line 134
+[36morchestrator_1    |[0m INFO: Processing chunk 14 named None from line 139
+[36morchestrator_1    |[0m INFO: Processing chunk 15 named None from line 151
+[36morchestrator_1    |[0m INFO: Processing chunk 16 named None from line 151
+[36morchestrator_1    |[0m INFO: INFO:evaluate-model:Saving document at /usr/share/data/report/
+[36morchestrator_1    |[0m INFO: Weaved ./document.py to /usr/share/data/report/document.md
+[36morchestrator_1    |[0m INFO: /usr/share/data/report/document_figure7_1.png
+[36morchestrator_1    |[0m INFO: document_figure7_1.png
+[36morchestrator_1    |[0m INFO: /usr/share/data/report/document_figure8_1.png
+[36morchestrator_1    |[0m INFO: document_figure8_1.png
+[36morchestrator_1    |[0m INFO: /usr/share/data/report/document_figure10_1.png
+[36morchestrator_1    |[0m INFO: document_figure10_1.png
+[36morchestrator_1    |[0m INFO: /usr/share/data/report/document_figure11_1.png
+[36morchestrator_1    |[0m INFO: document_figure11_1.png
+[36morchestrator_1    |[0m INFO: /usr/share/data/report/document_figure16_1.png
+[36morchestrator_1    |[0m INFO: document_figure16_1.png
+[36morchestrator_1    |[0m INFO: [pid 1] Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) done      EvaluateModel(no_remove_finished=False, out_dir=/usr/share/data/report/)
+[36morchestrator_1    |[0m DEBUG: 1 running tasks, waiting for next task to finish
+[36morchestrator_1    |[0m INFO: Informed scheduler that task   EvaluateModel_False__usr_share_data__9b6bd538aa   has status   DONE
+[36morchestrator_1    |[0m DEBUG: Asking scheduler for work...
+[36morchestrator_1    |[0m DEBUG: Done
+[36morchestrator_1    |[0m DEBUG: There are no more tasks to run at this time
+[36morchestrator_1    |[0m INFO: Worker Worker(salt=827426010, workers=1, host=7d6bf4f899d4, username=root, pid=1) was stopped. Shutting down Keep-Alive thread
+[36morchestrator_1    |[0m INFO: 
+[36morchestrator_1    |[0m ===== Luigi Execution Summary =====
+[36morchestrator_1    |[0m 
+[36morchestrator_1    |[0m Scheduled 4 tasks of which:
+[36morchestrator_1    |[0m * 4 ran successfully:
+[36morchestrator_1    |[0m     - 1 DownloadData(no_remove_finished=False, fname=wine_dataset, out_dir=/usr/share/data/raw/, url=https://github.com/datarevenue-berlin/code-challenge-2019/releases/download/0.1.0/dataset_sampled.csv)
+[36morchestrator_1    |[0m     - 1 EvaluateModel(no_remove_finished=False, out_dir=/usr/share/data/report/)
+[36morchestrator_1    |[0m     - 1 MakeDatasets(no_remove_finished=False, out_dir=/usr/share/data/refined/)
+[36morchestrator_1    |[0m     - 1 TrainModel(no_remove_finished=False, out_dir=/usr/share/data/model/)
+[36morchestrator_1    |[0m 
+[36morchestrator_1    |[0m This progress looks :) because there were no failed tasks or missing dependencies
+[36morchestrator_1    |[0m 
+[36morchestrator_1    |[0m ===== Luigi Execution Summary =====
+[36morchestrator_1    |[0m 
+[36morchestrator_1    |[0m The all might directory: /home/rouvenr/Dokumente/Projects/code-challenge-2020/data_root
+[36mcode-challenge-2020_orchestrator_1 exited with code 0
+[0m

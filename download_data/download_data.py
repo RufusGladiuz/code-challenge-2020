@@ -10,6 +10,7 @@ import json
 
 logging.basicConfig(level=logging.INFO)
 
+
 @click.command()
 @click.option('--name')
 @click.option('--url')
@@ -41,7 +42,7 @@ def download_data(name, url, out_dir):
 
     if os.path.exists(out_dir) == False:
         os.makedirs(out_dir)
-    
+
     log.info(f"Lable Column: {os.getenv('LABLE_COL')}")
     urllib.request.urlretrieve(url, str(out_path))
 
